@@ -22,46 +22,71 @@
             color: var(--dark-blue);
         }
 
-        .bg-dark-blue { background-color: var(--dark-blue); }
-        .text-gold { color: var(--gold); }
-        .bg-gold { background-color: var(--gold); }
-        .btn-gold { 
-            background-color: var(--gold); 
-            color: var(--dark-blue); 
-            transition: all 0.3s ease; 
-            font-weight: bold; 
+        .bg-dark-blue {
+            background-color: var(--dark-blue);
         }
+
+        .text-gold {
+            color: var(--gold);
+        }
+
+        .bg-gold {
+            background-color: var(--gold);
+        }
+
+        .border-gold {
+            border-color: var(--gold);
+        }
+
+        .btn-gold {
+            background-color: var(--gold);
+            color: var(--dark-blue);
+            transition: all 0.3s ease;
+            font-weight: bold;
+        }
+
         .btn-gold:hover {
             background-color: var(--gold-light);
             transform: translateY(-2px);
             box-shadow: 0 4px 15px rgba(197, 160, 89, 0.4);
         }
 
-        /* Estilos para el Carrusel */
-        .carrusel-container { position: relative; overflow: hidden; border-radius: 0.75rem 0.75rem 0 0; }
-        @media (min-width: 768px) { .carrusel-container { border-radius: 0.75rem 0 0 0.75rem; } }
-        
-        .slide { display: none; width: 100%; height: 350px; object-fit: cover; animation: fade 0.5s; }
-        .slide.active { display: block; }
-        
-        @keyframes fade { from { opacity: 0.4 } to { opacity: 1 } }
-
-        .btn-nav {
-            position: absolute; top: 50%; transform: translateY(-50%);
-            background: rgba(10, 25, 47, 0.7); color: var(--gold);
-            padding: 12px; cursor: pointer; border: none; z-index: 10;
-            transition: all 0.3s;
+        .nav-link {
+            position: relative;
+            transition: color 0.3s;
         }
-        .btn-nav:hover { background: var(--dark-blue); color: white; }
-        .prev { left: 10px; border-radius: 50% 5px 5px 50%; }
-        .next { right: 10px; border-radius: 5px 50% 50% 5px; }
 
-        .nav-link { position: relative; transition: color 0.3s; }
         .nav-link::after {
-            content: ''; position: absolute; width: 0; height: 2px;
-            bottom: -5px; left: 0; background-color: var(--gold); transition: width 0.3s;
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -5px;
+            left: 0;
+            background-color: var(--gold);
+            transition: width 0.3s;
         }
-        .nav-link:hover::after { width: 100%; }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        .property-card:hover img {
+            transform: scale(1.1);
+        }
+
+        .property-card img {
+            transition: transform 0.5s ease;
+        }
+
+        /* Estilos específicos para las casas dinámicas */
+        .carrusel-img { display: none; width: 100%; height: 400px; object-fit: cover; }
+        .carrusel-img.active { display: block; }
+        .btn-nav { 
+            position: absolute; top: 50%; transform: translateY(-50%);
+            background: rgba(10, 25, 47, 0.7); color: #c5a059; 
+            padding: 15px 10px; border: none; cursor: pointer; z-index: 10;
+        }
     </style>
 </head>
 
@@ -72,6 +97,7 @@
                 <img src="logo rg.PNG" alt="Rio Garona" class="h-16 w-auto object-contain">
                 <span class="text-3xl font-bold text-white">RIO <span class="text-gold">GARONA</span></span>
             </a>
+
             <div class="hidden md:flex space-x-8 font-medium text-sm">
                 <a href="index.html" class="nav-link hover:text-gold">Inicio</a>
                 <a href="servicios.html" class="nav-link hover:text-gold">Vender</a>
@@ -80,7 +106,12 @@
                 <a href="blog.html" class="nav-link hover:text-gold">Actualidad</a>
                 <a href="contacto.html" class="nav-link hover:text-gold">Contacto</a>
             </div>
-            <button class="md:hidden text-2xl text-gold" id="mobileMenuBtn"><i class="fas fa-bars"></i></button>
+
+            <div class="flex items-center gap-4">
+                <button class="md:hidden text-2xl text-gold" id="mobileMenuBtn">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
         </div>
     </nav>
 
@@ -91,17 +122,14 @@
         </div>
         <div class="relative z-10 max-w-4xl mx-auto px-4">
             <h1 class="text-5xl md:text-6xl font-bold mb-6">Propiedades Exclusivas</h1>
-            <p class="text-xl md:text-2xl text-gold font-light tracking-wide">Acceso Privado a la Excelencia Inmobiliaria</p>
+            <p class="text-xl md:text-2xl text-gold font-light tracking-wide">Acceso Privado a la Excelencia
+                Inmobiliaria</p>
         </div>
     </section>
 
-    <section id="seccion-anuncios" class="py-16 bg-gray-100 hidden">
+    <section id="seccion-dinamica" class="py-12 bg-gray-100 hidden">
         <div class="container mx-auto px-4">
-            <div class="text-center mb-12">
-                <h2 class="text-3xl font-bold text-dark-blue italic">Nuestras Últimas Oportunidades</h2>
-                <div class="w-20 h-1 bg-gold mx-auto mt-4"></div>
-            </div>
-            <div id="contenedor-propiedades" class="space-y-12 max-w-6xl mx-auto">
+            <div id="contenedor-casas" class="space-y-12">
                 </div>
         </div>
     </section>
@@ -110,14 +138,161 @@
         <div class="container mx-auto px-4">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
                 <div>
-                    <h2 class="text- gold font-bold tracking-widest uppercase text-sm mb-4 text-gold">Nuestra Filosofía</h2>
-                    <h3 class="text-3xl md:text-4xl font-bold mb-6 text-dark-blue">Más allá del mercado convencional</h3>
-                    <p class="text-gray-600 mb-6 leading-relaxed">En Rio Garona, entendemos que la verdadera exclusividad requiere discreción. Por ello, la mayoría de nuestras propiedades más selectas no se publican en portales inmobiliarios ni en nuestra propia web de forma abierta.</p>
-                    <a href="contacto.html" class="btn-gold py-3 px-8 rounded-full font-bold inline-block hover:shadow-lg transition-all">Solicitar Acceso Privado</a>
+                    <h2 class="text- gold font-bold tracking-widest uppercase text-sm mb-4 text-gold">Nuestra Filosofía
+                    </h2>
+                    <h3 class="text-3xl md:text-4xl font-bold mb-6 text-dark-blue">Más allá del mercado convencional
+                    </h3>
+                    <p class="text-gray-600 mb-6 leading-relaxed">
+                        En Rio Garona, entendemos que la verdadera exclusividad requiere discreción. Por ello, la
+                        mayoría de nuestras propiedades más selectas no se publican en portales inmobiliarios ni en
+                        nuestra propia web de forma abierta.
+                    </p>
+                    <p class="text-gray-600 mb-8 leading-relaxed">
+                        Gestionamos una cartera privada de activos premium ("Off-Market") a la que solo tienen acceso
+                        nuestros clientes cualificados. Esto garantiza la privacidad tanto de vendedores como de
+                        compradores.
+                    </p>
+                    <a href="contacto.html"
+                        class="btn-gold py-3 px-8 rounded-full font-bold inline-block hover:shadow-lg transition-all">
+                        Solicitar Acceso Privado
+                    </a>
                 </div>
                 <div class="relative">
-                    <img src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=800&q=80" alt="Interior Luxury" class="rounded-2xl shadow-xl relative z-10 w-full transform hover:scale-[1.02] transition-transform duration-500">
+                    <div class="absolute -top-4 -left-4 w-24 h-24 bg-gold/10 rounded-full z-0"></div>
+                    <img src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=800&q=80"
+                        alt="Interior Luxury"
+                        class="rounded-2xl shadow-xl relative z-10 w-full transform hover:scale-[1.02] transition-transform duration-500">
                 </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-20 bg-gray-50">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16">
+                <h3 class="text-3xl font-bold text-dark-blue">Nuestra Cartera</h3>
+                <div class="w-24 h-1 bg-gold mt-4 mx-auto"></div>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="bg-white p-8 rounded-xl shadow-sm hover:shadow-2xl transition-all group">
+                    <div
+                        class="w-16 h-16 bg-dark-blue text-gold rounded-full flex items-center justify-center mb-6 text-2xl group-hover:bg-gold group-hover:text-dark-blue transition-colors">
+                        <i class="fas fa-city"></i>
+                    </div>
+                    <h4 class="text-xl font-bold mb-3">Áticos en el Centro</h4>
+                    <p class="text-gray-500">Viviendas únicas con vistas panorámicas en las zonas más prestigiosas de la
+                        ciudad.</p>
+                </div>
+                <div class="bg-white p-8 rounded-xl shadow-sm hover:shadow-2xl transition-all group">
+                    <div
+                        class="w-16 h-16 bg-dark-blue text-gold rounded-full flex items-center justify-center mb-6 text-2xl group-hover:bg-gold group-hover:text-dark-blue transition-colors">
+                        <i class="fas fa-home"></i>
+                    </div>
+                    <h4 class="text-xl font-bold mb-3">Villas Independientes</h4>
+                    <p class="text-gray-500">Privacidad y espacio en urbanizaciones de lujo con seguridad 24 horas.</p>
+                </div>
+                <div class="bg-white p-8 rounded-xl shadow-sm hover:shadow-2xl transition-all group">
+                    <div
+                        class="w-16 h-16 bg-dark-blue text-gold rounded-full flex items-center justify-center mb-6 text-2xl group-hover:bg-gold group-hover:text-dark-blue transition-colors">
+                        <i class="fas fa-water"></i>
+                    </div>
+                    <h4 class="text-xl font-bold mb-3">Propiedades en Costa</h4>
+                    <p class="text-gray-500">Segundas residencias exclusivas en Benicàssim y Oropesa del Mar.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-20 bg-dark-blue text-white">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row gap-12 items-center">
+                <div class="md:w-1/2 order-2 md:order-1">
+                    <img src="https://images.unsplash.com/photo-1556761175-5973dc0f32e7?auto=format&fit=crop&w=800&q=80"
+                        alt="Meeting" class="rounded-xl shadow-2xl opacity-90">
+                </div>
+                <div class="md:w-1/2 order-1 md:order-2">
+                    <h2 class="text-3xl md:text-4xl font-bold mb-6">Servicio de Personal Shopper</h2>
+                    <p class="text-gray-300 mb-6 leading-relaxed">
+                        No solo vendemos casas, le ayudamos a comprar. Nuestro servicio de búsqueda personalizada
+                        rastrea todo el mercado para encontrar exactamente lo que necesita, ahorrándole tiempo y
+                        gestiones ineficaces.
+                    </p>
+                    <ul class="space-y-4 mb-8">
+                        <li class="flex items-center gap-3">
+                            <i class="fas fa-check text-gold"></i>
+                            <span>Análisis exhaustivo de sus necesidades y estilo de vida.</span>
+                        </li>
+                        <li class="flex items-center gap-3">
+                            <i class="fas fa-check text-gold"></i>
+                            <span>Pre-selección y visitas filtradas.</span>
+                        </li>
+                        <li class="flex items-center gap-3">
+                            <i class="fas fa-check text-gold"></i>
+                            <span>Negociación experta del precio final.</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-20 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="text-gold font-bold uppercase tracking-widest text-sm mb-2">El Camino a su Hogar</h2>
+                <h3 class="text-3xl font-bold text-dark-blue">Proceso de Compra</h3>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 relative">
+                <div class="hidden md:block absolute top-12 left-0 w-full h-0.5 bg-gray-200 -z-0"></div>
+
+                <div class="relative z-10 text-center bg-white p-4">
+                    <div
+                        class="w-24 h-24 bg-dark-blue text-white rounded-full flex items-center justify-center text-3xl font-bold mx-auto mb-6 border-4 border-white shadow-lg">
+                        1</div>
+                    <h4 class="font-bold text-xl mb-2">Entrevista</h4>
+                    <p class="text-gray-500 text-sm">Definimos sus requerimientos, presupuesto y zonas de interés.</p>
+                </div>
+                <div class="relative z-10 text-center bg-white p-4">
+                    <div
+                        class="w-24 h-24 bg-white text-dark-blue border-2 border-dark-blue rounded-full flex items-center justify-center text-3xl font-bold mx-auto mb-6 shadow-lg">
+                        2</div>
+                    <h4 class="font-bold text-xl mb-2">Selección</h4>
+                    <p class="text-gray-500 text-sm">Presentamos una lista curada de oportunidades On y Off-Market.</p>
+                </div>
+                <div class="relative z-10 text-center bg-white p-4">
+                    <div
+                        class="w-24 h-24 bg-white text-dark-blue border-2 border-dark-blue rounded-full flex items-center justify-center text-3xl font-bold mx-auto mb-6 shadow-lg">
+                        3</div>
+                    <h4 class="font-bold text-xl mb-2">Visitas</h4>
+                    <p class="text-gray-500 text-sm">Organizamos visitas privadas ajustadas a su agenda.</p>
+                </div>
+                <div class="relative z-10 text-center bg-white p-4">
+                    <div
+                        class="w-24 h-24 bg-gold text-white rounded-full flex items-center justify-center text-3xl font-bold mx-auto mb-6 border-4 border-white shadow-lg">
+                        4</div>
+                    <h4 class="font-bold text-xl mb-2">Cierre</h4>
+                    <p class="text-gray-500 text-sm">Asesoramiento legal y acompañamiento hasta la firma notarial.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-24 bg-gray-50 relative overflow-hidden">
+        <div class="absolute inset-0 bg-gold/5 transform -skew-y-3 origin-top-left scale-110"></div>
+        <div class="container mx-auto px-4 relative z-10 text-center">
+            <h2 class="text-4xl font-bold text-dark-blue mb-8">¿Listo para encontrar su próxima propiedad?</h2>
+            <p class="text-xl text-gray-600 mb-10 max-w-2xl mx-auto">
+                No espere a que aparezca en internet. Las mejores oportunidades se venden antes de ser publicadas.
+            </p>
+            <div class="flex flex-col sm:flex-row justify-center gap-6">
+                <a href="contacto.html"
+                    class="btn-gold py-4 px-12 rounded-lg font-bold text-lg shadow-xl hover:-translate-y-1 transition-transform">
+                    Contactar con un Asesor
+                </a>
+                <a href="servicios.html"
+                    class="px-12 py-4 rounded-lg border-2 border-dark-blue text-dark-blue font-bold text-lg hover:bg-dark-blue hover:text-white transition-colors">
+                    Saber más sobre Venta
+                </a>
             </div>
         </div>
     </section>
@@ -125,89 +300,124 @@
     <footer class="bg-gray-900 text-white pt-20 pb-10">
         <div class="container mx-auto px-4 text-center">
             <div class="flex flex-col items-center justify-center gap-8 mb-16">
-                <div class="text-2xl font-bold mb-8 flex justify-center items-center gap-2">
-                    <img src="logo rg.PNG" alt="Rio Garona" class="h-20 w-auto object-contain">
-                    <span class="text-white">RIO <span class="text-gold">GARONA</span></span>
+                <div>
+                    <div class="text-2xl font-bold mb-8 flex justify-center items-center gap-2">
+                        <img src="logo rg.PNG" alt="Rio Garona" class="h-20 w-auto object-contain">
+                        <span class="text-white">RIO <span class="text-gold">GARONA</span></span>
+                    </div>
+                    <p class="text-gray-400 leading-relaxed mb-8 max-w-sm mx-auto">
+                        Líderes en el mercado inmobiliario nacional con una red de oficinas propias dedicadas a la
+                        excelencia en el servicio al cliente con Rio Garona.
+                    </p>
+                </div>
+            </div>
+
+            <div
+                class="pt-10 border-t border-gray-800 flex flex-col items-center gap-6 text-gray-500 text-xs uppercase tracking-widest">
+                <div class="flex gap-8">
+                    <a href="aviso-legal.html" class="hover:text-white transition-colors">Aviso Legal</a>
+                    <a href="privacidad.html" class="hover:text-white transition-colors">Privacidad</a>
+                    <a href="cookies.html" class="hover:text-white transition-colors">Cookies</a>
                 </div>
                 <p>&copy; 2026 Inmobiliaria Rio Garona. Made with Excellence.</p>
             </div>
         </div>
     </footer>
 
+    <div id="mobileMenu"
+        class="fixed inset-0 bg-dark-blue z-40 transform translate-x-full transition-transform duration-300 md:hidden pt-40 px-6">
+        <div class="flex flex-col space-y-6 text-xl font-bold text-white text-center">
+            <a href="index.html" class="hover:text-gold transition-colors">Inicio</a>
+            <a href="servicios.html" class="hover:text-gold transition-colors">Vender</a>
+            <a href="propiedades.html" class="hover:text-gold transition-colors">Nuestras Propiedades</a>
+            <a href="nosotros.html" class="hover:text-gold transition-colors">Nosotros</a>
+            <a href="blog.html" class="hover:text-gold transition-colors">Actualidad</a>
+            <a href="contacto.html" class="hover:text-gold transition-colors">Contacto</a>
+        </div>
+    </div>
+
     <script>
+        // LÓGICA DEL MENÚ MÓVIL (MANTENIDA)
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+        const icon = mobileMenuBtn.querySelector('i');
+        let isMenuOpen = false;
+
+        mobileMenuBtn.addEventListener('click', () => {
+            isMenuOpen = !isMenuOpen;
+            if (isMenuOpen) {
+                mobileMenu.classList.remove('translate-x-full');
+                icon.classList.remove('fa-bars');
+                icon.classList.add('fa-times');
+            } else {
+                mobileMenu.classList.add('translate-x-full');
+                icon.classList.remove('fa-times');
+                icon.classList.add('fa-bars');
+            }
+        });
+
+        const mobileLinks = mobileMenu.querySelectorAll('a');
+        mobileLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                isMenuOpen = false;
+                mobileMenu.classList.add('translate-x-full');
+                icon.classList.remove('fa-times');
+                icon.classList.add('fa-bars');
+            });
+        });
+
+        // LÓGICA DE CARGA DE PROPIEDADES (NUEVA)
         const API_URL = 'https://script.google.com/macros/s/AKfycby4IZRpRjiQ-RbylG2wfLbFgRmA4nGegN1dOBMnNJRkBUUzefd47sa8h_NMRA0l75imdQ/exec?getJson=true';
 
         async function cargarPropiedades() {
             try {
-                const response = await fetch(API_URL);
-                const data = await response.json();
+                const res = await fetch(API_URL);
+                const casas = await res.json();
                 
-                if (data && data.length > 0) {
-                    const seccionAnuncios = document.getElementById('seccion-anuncios');
-                    const contenedor = document.getElementById('contenedor-propiedades');
-                    seccionAnuncios.classList.remove('hidden');
-                    
-                    data.reverse().forEach(casa => { // .reverse() para ver las últimas primero
-                        const card = crearCardPropiedad(casa);
-                        contenedor.innerHTML += card;
-                    });
-                }
+                if (casas.length === 0) return;
+
+                document.getElementById('seccion-dinamica').classList.remove('hidden');
+                const contenedor = document.getElementById('contenedor-casas');
+
+                casas.forEach(casa => {
+                    let fotosHtml = casa.imagenes.map((url, i) => 
+                        `<img src="${url}" class="carrusel-img img-${casa.id} ${i === 0 ? 'active' : ''}">`
+                    ).join('');
+
+                    contenedor.innerHTML += `
+                        <div class="bg-white rounded-2xl shadow-xl overflow-hidden flex flex-col md:flex-row border border-gray-200">
+                            <div class="relative md:w-1/2 h-[400px] overflow-hidden bg-black">
+                                ${fotosHtml}
+                                <button class="btn-nav left-0" onclick="moverCarrusel('${casa.id}', -1)">❮</button>
+                                <button class="btn-nav right-0" onclick="moverCarrusel('${casa.id}', 1)">❯</button>
+                            </div>
+                            <div class="md:w-1/2 p-8 flex flex-col justify-center">
+                                <span class="text-gold font-bold uppercase tracking-widest text-sm mb-2">${casa.provincia}</span>
+                                <h3 class="text-2xl font-bold text-dark-blue mb-2">${casa.calle}</h3>
+                                <div class="text-3xl font-bold text-gold mb-6">${casa.precio} €</div>
+                                <p class="text-gray-600 mb-8 line-clamp-4">${casa.descripcion}</p>
+                                <a href="${casa.url}" target="_blank" 
+                                   class="bg-dark-blue text-white py-4 px-8 rounded-lg font-bold text-center hover:bg-gold hover:text-dark-blue transition-all">
+                                   Ver Anuncio Completo
+                                </a>
+                            </div>
+                        </div>
+                    `;
+                });
             } catch (error) {
-                console.error("Error cargando propiedades:", error);
+                console.log("No se pudieron cargar propiedades dinámicas");
             }
         }
 
-        function crearCardPropiedad(casa) {
-            // Crear el HTML de las imágenes para el carrusel
-            const fotosHtml = casa.imagenes.map((url, index) => 
-                `<img src="${url.trim()}" class="slide slide-${casa.id} ${index === 0 ? 'active' : ''}" alt="Propiedad">`
-            ).join('');
-
-            return `
-                <div class="bg-white rounded-xl shadow-xl flex flex-col md:flex-row overflow-hidden border border-gray-200">
-                    <div class="md:w-1/2 carrusel-container">
-                        ${casa.imagenes.length > 1 ? `
-                            <button class="btn-nav prev" onclick="cambiarFoto('${casa.id}', -1)"><i class="fas fa-chevron-left"></i></button>
-                            <button class="btn-nav next" onclick="cambiarFoto('${casa.id}', 1)"><i class="fas fa-chevron-right"></i></button>
-                        ` : ''}
-                        ${fotosHtml}
-                    </div>
-                    <div class="md:w-1/2 p-8 flex flex-col justify-center">
-                        <div class="mb-2 text-dark-blue">
-                            <span class="font-bold text-xl uppercase tracking-wider">${casa.provincia}</span>
-                        </div>
-                        <h4 class="text-gray-600 text-lg mb-4 italic"><i class="fas fa-map-marker-alt text-gold mr-2"></i>${casa.calle}</h4>
-                        <div class="text-3xl font-bold text-dark-blue mb-4">${casa.precio} €</div>
-                        <p class="text-gray-500 mb-6 leading-relaxed line-clamp-4">${casa.descripcion}</p>
-                        
-                        <a href="${casa.url}" target="_blank" 
-                           class="bg-dark-blue text-white text-center py-4 px-6 rounded font-bold hover:bg-gold hover:text-dark-blue transition-all uppercase tracking-widest text-sm">
-                           Ver anuncio en Idealista
-                        </a>
-                    </div>
-                </div>
-            `;
+        function moverCarrusel(id, direccion) {
+            const imagenes = document.querySelectorAll(`.img-${id}`);
+            let activa = Array.from(imagenes).findIndex(img => img.classList.contains('active'));
+            imagenes[activa].classList.remove('active');
+            let siguiente = (activa + direccion + imagenes.length) % imagenes.length;
+            imagenes[siguiente].classList.add('active');
         }
 
-        // Función para mover el carrusel
-        function cambiarFoto(id, delta) {
-            const slides = document.querySelectorAll(`.slide-${id}`);
-            let currentIdx = Array.from(slides).findIndex(s => s.classList.contains('active'));
-            
-            slides[currentIdx].classList.remove('active');
-            let nextIdx = (currentIdx + delta + slides.length) % slides.length;
-            slides[nextIdx].classList.add('active');
-        }
-
-        // Mobile Menu Logic
-        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
-        mobileMenuBtn.addEventListener('click', () => {
-            const mobileMenu = document.getElementById('mobileMenu');
-            // Implementación básica del toggle según tu estructura anterior
-        });
-
-        // Ejecutar al cargar la página
-        window.onload = cargarPropiedades;
+        cargarPropiedades();
     </script>
 </body>
 </html>
